@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/:id', async (req, res) => {
-    // var info = {}
+     var info = {}
     
     const headers = {
         Authorization: 'Bearer ' + req.session.access_token,        
