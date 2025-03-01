@@ -12,7 +12,8 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var logger = require('morgan');
 
-app.use(session({secret: 'secretkey', saveUninitialized: true, resave: false, cookie: {secure: true, sameSite: 'lax'}}))
+app.set('trust proxy', 1);
+app.use(session({secret: 'secretkey', saveUninitialized: true, resave: false, cookie: {secure: true, sameSite: 'strict'}}))
 
 
 var indexRouter = require('./routes/index');
