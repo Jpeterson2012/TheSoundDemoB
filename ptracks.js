@@ -2,11 +2,9 @@ var express = require('express');
 var router = express.Router();
 const { con } = require('../sql.js')
 
-router.get('/:id', async (req, res) => {
-    url = `https://api.spotify.com/v1/playlists/${req.params.id}/tracks`
-    
+router.get('/:id', async (req, res) => {        
     const headers = {
-        Authorization: 'Bearer ' + req.session.access_token
+        Authorization: 'Bearer ' + process.env.access_token
       }
 
     var pages = 0
@@ -40,9 +38,13 @@ router.get('/:id', async (req, res) => {
     a.items = arr
     res.send(a)
     // res.end()
+
+
+
+    
     try{        
         // sql = 'select playlist_id from uplaylists where name = "temp_playlist"'
-        sql = `select playlist_id from ${req.session.username}playlists where name = "temp_playlist"`
+        sql = `select playlist_id from ${process.env.username}playlists where name = "temp_playlist"`
         con.query(sql, function(err,result) {
         if (err) throw err;
         var empty = result.length
@@ -50,7 +52,7 @@ router.get('/:id', async (req, res) => {
         if (empty === 0){
             let temp3 = []
             // sql = `INSERT INTO uplaylists (playlist_id, images, name, public, uri, tracks) VALUES ('${req.params.id}', '${JSON.stringify(temp3)}', 'temp_playlist', true, 'spotify:playlist:${req.params.id}', ${con.escape(JSON.stringify(temp2))} )`
-            sql = `INSERT INTO ${req.session.username}playlists (playlist_id, images, name, public, uri, tracks) VALUES ('${req.params.id}', '${JSON.stringify(temp3)}', 'temp_playlist', true, 'spotify:playlist:${req.params.id}', ${con.escape(JSON.stringify(temp2))} )`
+            sql = `INSERT INTO ${process.env.username}playlists (playlist_id, images, name, public, uri, tracks) VALUES ('${req.params.id}', '${JSON.stringify(temp3)}', 'temp_playlist', true, 'spotify:playlist:${req.params.id}', ${con.escape(JSON.stringify(temp2))} )`
           con.query(sql, (err) => {
             if (err) throw err;
             console.log('Temp Playlist Added')
@@ -62,7 +64,7 @@ router.get('/:id', async (req, res) => {
         }
         else{
           // sql = `UPDATE uplaylists SET playlist_id='${req.params.id}',uri='spotify:playlist:${req.params.id}',tracks=${con.escape(JSON.stringify(temp2))}  WHERE name = "temp_playlist"`
-          sql = `UPDATE ${req.session.username}playlists SET playlist_id='${req.params.id}',uri='spotify:playlist:${req.params.id}',tracks=${con.escape(JSON.stringify(temp2))}  WHERE name = "temp_playlist"`
+          sql = `UPDATE ${process.env.username}playlists SET playlist_id='${req.params.id}',uri='spotify:playlist:${req.params.id}',tracks=${con.escape(JSON.stringify(temp2))}  WHERE name = "temp_playlist"`
           con.query(sql, (err) => {
             if (err) throw err;
             console.log('Temp Playlist Updated')

@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/:id', async (req, res) => {
-    // var info = {}
+    var info = {}
     
     const headers = {
-        Authorization: 'Bearer ' + req.session.access_token,        
+        Authorization: 'Bearer ' + process.env.access_token,        
       }
     try{    
     
@@ -17,14 +17,14 @@ router.get('/:id', async (req, res) => {
         while(true) {
             url = `https://api.spotify.com/v1/artists/${req.params.id}/albums?include_groups=single,album,appears_on,compilation&offset=${pages}&limit=20`
 
-          resp = await fetch(url, {headers})
+          let resp = await fetch(url, {headers})
           data = await resp.json()
           temp.push(...data.items)
 
           pages += 20
 
           if(data.next == null) {
-              console.log("done")
+              // console.log("done")
               break
           } 
         }
